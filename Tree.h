@@ -26,12 +26,13 @@ class Tree {
     int size;
     int height;
     bool verbose;
+    bool autoResolve = true;
 
     enum rotation {r_right, r_left, r_right_left, r_left_right, r_none};
     enum traversal {t_preorder, t_inorder, t_postorder, t_levelorder};
 
     /** AVL Calculations **/
-    void calculateHeight(){this->height = this->root->updateHeight();};
+    int calculateHeight(TreeNode* node=nullptr);
 
     int nodeBalanceRatio(TreeNode* node){return 0;};
     int nodeSubtreeHeight(TreeNode* node){return 0;};
@@ -54,7 +55,6 @@ class Tree {
     void treeResolver();
     static std::vector<int> concatVectors(std::vector<int> &vect1, std::vector<int> &vect2);
 
-
 public:
     /** Constructor/Destructor **/
     Tree() : verbose(false), size(0), height(0){};
@@ -70,7 +70,7 @@ public:
 
     /** Required Methods **/
     void insert(int value, TreeNode *base= nullptr);
-    void removeNode(){};
+    void remove(int value){};
     void search(int val){};
     std::vector<int> preorder(TreeNode *node=nullptr);
     std::vector<int> inorder(TreeNode *node=nullptr);
@@ -78,6 +78,16 @@ public:
     std::vector<int> levelorder(TreeNode *node=nullptr);
     void levelCount(){};
     void removeInorder(){};
+
+    /** Testing Helpers **/
+    bool toggleVerbose() {
+        this->verbose = !this->verbose;
+        return this->verbose;
+    };
+    bool toggleAutoResolve() {
+        this->autoResolve = !this->autoResolve;
+        return this->autoResolve;
+    }
 
 };
 

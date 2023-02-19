@@ -28,8 +28,10 @@ void Tree::clearTree(TreeNode *node) {
 }
 // Runs after operations are performed on the tree
 void Tree::treeResolver() {
-//    this->checkBalanced();
     this->calculateHeight();
+    if(autoResolve) {
+        this->checkBalanced();
+    }
     if(verbose) {
         std::cout << "Preorder:" << std::endl;
         this->printTree(traversal::t_preorder);
@@ -220,6 +222,30 @@ void Tree::printTree(Tree::traversal method) {
     }
     std::cout << *treeIter;
     std::cout << std::endl;
+}
+
+/**== AVL Calculations ==**/
+int Tree::calculateHeight(TreeNode *node) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return 0;
+    }
+
+    int leftHeight = 0;
+    int rightHeight = 0;
+
+    if(node->leftNode() != nullptr)
+        leftHeight = 1+calculateHeight(node->leftNode());
+    if(node->rightNode() != nullptr)
+        rightHeight = 1+calculateHeight(node->rightNode());
+
+    int treeHeight = (leftHeight > rightHeight) ? leftHeight : rightHeight;
+    if(node == this->root)
+        this->height = treeHeight;
+
+    return treeHeight;
 }
 
 

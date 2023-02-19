@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 /** =============================================
  * DONE: create basic tree structure with int
  * DONE: create insert method
@@ -29,4 +28,15 @@
 //int main() {
 //    std::cout << "Hello, World!" << std::endl;
 //    return 0;
+//}
+
+//#define CATCH_CONFIG_RUNNER
+//#include "test-unit/catch.hpp"
+//
+//int main(int argc, char *argv[])
+//{
+////    MPI_Init(argc, argv);
+//    int result = Catch::Session().run(argc, argv);
+////    MPI_Finalize();
+//    return result;
 //}
