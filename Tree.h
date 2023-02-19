@@ -2,25 +2,46 @@
 // Created by Isaac Hunter on 2/13/23.
 //
 
+
+
 #ifndef AVL_TREE_TREE_H
 #define AVL_TREE_TREE_H
 
 #include <iostream>
+#include <vector>
+#include <queue>
 #include "TreeNode.h"
+#include "Exceptions.h"
+
+/**
+ * Resolve:
+ *  update heights
+ *  update balance
+ *  rotate if necessary
+ *  print tree if tests enabled
+ * **/
 
 class Tree {
     TreeNode* root = nullptr;
     int size;
     int height;
+    bool verbose;
+
+    enum rotation {r_right, r_left, r_right_left, r_left_right, r_none};
+    enum traversal {t_preorder, t_inorder, t_postorder, t_levelorder};
 
     /** AVL Calculations **/
-    void calculateHeight(){};
+    void calculateHeight(){this->height = this->root->updateHeight();};
 
     int nodeBalanceRatio(TreeNode* node){return 0;};
     int nodeSubtreeHeight(TreeNode* node){return 0;};
 
-    bool isBalanced(){return true;};
+    rotation checkBalanced(){return rotation::r_right;};
 
+    /** Traversals **/
+//    int preorderIterator(TreeNode* node);
+//    int inorderIterator(TreeNode* node);
+//    int postorderIterator(TreeNode* node);
 
     /** Rotations **/
     void rotateRight(){};
@@ -28,21 +49,34 @@ class Tree {
     void rotateRightLeft(){};
     void rotateLeftRight(){};
 
+    /** Utility Methods **/
+    void clearTree(TreeNode* node);
+    void treeResolver();
+    static std::vector<int> concatVectors(std::vector<int> &vect1, std::vector<int> &vect2);
+
 
 public:
-    Tree();
+    /** Constructor/Destructor **/
+    Tree() : verbose(false), size(0), height(0){};
+    explicit Tree(bool verbose) : verbose(verbose), size(0), height(0){};
+    ~Tree();
+
     /** Accessors **/
-    int getSize(){return size;};
-    int getHeight(){return height;};
+    int getSize() const {return size;};
+    int getHeight() const {return height;};
+
+    /** Printing Methods **/
+    void printTree(traversal method=traversal::t_preorder);
 
     /** Required Methods **/
-    void insertNode(){};
+    void insert(int value, TreeNode *base= nullptr);
     void removeNode(){};
     void search(int val){};
-    void printPreorder(){};
-    void printInorder(){};
-    void printPostorder(){};
-    void printLevelCount(){};
+    std::vector<int> preorder(TreeNode *node=nullptr);
+    std::vector<int> inorder(TreeNode *node=nullptr);
+    std::vector<int> postorder(TreeNode *node=nullptr);
+    std::vector<int> levelorder(TreeNode *node=nullptr);
+    void levelCount(){};
     void removeInorder(){};
 
 };

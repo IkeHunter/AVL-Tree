@@ -2,10 +2,13 @@
 // Created by Isaac Hunter on 2/13/23.
 //
 
+
 #ifndef AVL_TREE_TREENODE_H
 #define AVL_TREE_TREENODE_H
-
 #include <iostream>
+
+#include "Exceptions.h"
+
 
 class TreeNode {
     int val;
@@ -18,18 +21,24 @@ class TreeNode {
     void calculateHeight() {}; // get height of longest string of nodes
     void calculateBalance() {}; // get balance value -1, 0, 1, based on AVL
 
-
 public:
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode* rightNode() {return right;};
     TreeNode* leftNode() {return left;};
-    int getHeight() {return height;};
-    int getBalance() {return balance;};
-};
 
-//TreeNode::TreeNode(int x) {
-//    std::cout << "tree node works" << std::endl;
-//}
+    /** Accessors **/
+    int getHeight() const {return height;};
+    int getBalance() const {return balance;};
+    int getValue() const {return val;};
+
+    /** Mutators **/
+    void insertRightNode(TreeNode* node);
+    void insertLeftNode(TreeNode* node);
+
+    /** Utility **/
+    int updateHeight();
+
+};
 
 
 
