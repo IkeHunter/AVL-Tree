@@ -30,6 +30,7 @@ class Tree {
 
     enum rotation {r_right, r_left, r_right_left, r_left_right, r_none};
     enum traversal {t_preorder, t_inorder, t_postorder, t_levelorder};
+    enum relationship {f_node, f_parent, f_grandparent};
 
     /** AVL Calculations **/
     int calculateHeight(TreeNode* node=nullptr);
@@ -54,6 +55,8 @@ class Tree {
     void clearTree(TreeNode* node);
     void treeResolver();
     static std::vector<int> concatVectors(std::vector<int> &vect1, std::vector<int> &vect2);
+    bool verifyNode(TreeNode* node);
+    TreeNode* searchParent(int value, TreeNode* node= nullptr);
 
 public:
     /** Constructor/Destructor **/
@@ -70,8 +73,8 @@ public:
 
     /** Required Methods **/
     void insert(int value, TreeNode *base= nullptr);
-    void remove(int value){};
-    void search(int val){};
+    TreeNode* search(int val, TreeNode* node= nullptr, relationship member=f_node);
+    bool remove(int value);
     std::vector<int> preorder(TreeNode *node=nullptr);
     std::vector<int> inorder(TreeNode *node=nullptr);
     std::vector<int> postorder(TreeNode *node=nullptr);

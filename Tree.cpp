@@ -10,9 +10,7 @@ std::vector<int> Tree::concatVectors(std::vector<int> &vect1, std::vector<int> &
     vect1.insert(vect1.end(), vect2.begin(), vect2.end());
     return vect1;
 }
-void concatVectors2(std::vector<int> &vect1, std::vector<int> &vect2) {
-    vect1.insert(vect1.end(), vect2.begin(), vect2.end());
-}
+
 
 /**== Base and Internal Methods ==**/
 Tree::~Tree() {
@@ -96,15 +94,17 @@ std::vector<int> Tree::preorder(TreeNode *node) {
         else
             return nodeVector;
     }
+//    if(!Tree::verifyNode(node))
+//        return nodeVector;
 
     nodeVector.push_back(node->getValue()); // Node
     if(node->leftNode() != nullptr) { // Left Subtree
         std::vector<int> leftVector = this->preorder(node->leftNode());
-        concatVectors2(nodeVector, leftVector);
+        concatVectors(nodeVector, leftVector);
     }
     if(node->rightNode() != nullptr) { // Right Subtree
         std::vector<int> rightVector = this->preorder(node->rightNode());
-        concatVectors2(nodeVector, rightVector);
+        concatVectors(nodeVector, rightVector);
     }
 
     return nodeVector;
@@ -122,12 +122,12 @@ std::vector<int> Tree::inorder(TreeNode *node) {
 
     if(node->leftNode() != nullptr) { // Left Subtree
         std::vector<int> leftVector = this->inorder(node->leftNode());
-        nodeVector = concatVectors(nodeVector, leftVector);
+        concatVectors(nodeVector, leftVector);
     }
     nodeVector.push_back(node->getValue()); // Node
     if(node->rightNode() != nullptr) { // Right Subtree
         std::vector<int> rightVector = this->inorder(node->rightNode());
-        nodeVector = concatVectors(nodeVector, rightVector);
+        concatVectors(nodeVector, rightVector);
     }
 
     return nodeVector;
@@ -145,11 +145,11 @@ std::vector<int> Tree::postorder(TreeNode *node) {
 
     if(node->leftNode() != nullptr) { // Left Subtree
         std::vector<int> leftVector = this->postorder(node->leftNode());
-        nodeVector = concatVectors(nodeVector, leftVector);
+        concatVectors(nodeVector, leftVector);
     }
     if(node->rightNode() != nullptr) { // Right Subtree
         std::vector<int> rightVector = this->postorder(node->rightNode());
-        nodeVector = concatVectors(nodeVector, rightVector);
+        concatVectors(nodeVector, rightVector);
     }
     nodeVector.push_back(node->getValue()); // Node
 
@@ -245,8 +245,150 @@ int Tree::calculateHeight(TreeNode *node) {
     if(node == this->root)
         this->height = treeHeight;
 
+    node->updateHeight(treeHeight);
     return treeHeight;
 }
+
+TreeNode *Tree::search(int val, TreeNode* node, relationship member) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return nullptr;
+    }
+    if(val == node->getValue())
+        return node;
+
+
+
+    if(node->getHeight() == 0)
+        return nullptr;
+    else if(val < node->getValue())
+        node = search(val, node->leftNode());
+    else if(val > node->getValue())
+        node = search(val, node->rightNode());
+
+    return node;
+}
+
+/**== Remove node if node is root, node as 0,1,2 children, using successor method ==**/
+bool Tree::remove(int value) {
+    TreeNode* node = search(value);
+    if(node == nullptr)
+        return false;
+    TreeNode* parent = searchParent(value);
+
+    if(node == this->root) { // node is root
+        TreeNode* successor = node->rightNode();
+        TreeNode* successorParent = node;
+        TreeNode* successorChild = nullptr;
+
+        TreeNode* leftChild = node->leftNode();
+        TreeNode* rightChild = node->rightNode();
+
+        while(successor->leftNode() != nullptr) {
+            successorParent = successor;
+            successor = successor->leftNode();
+        }
+        if(successor->getChildren() == 1) {
+            successorChild = successor->rightNode();
+            successor->removeRightNode();
+        }
+
+
+        node->removeRightNode();
+        node->removeLeftNode();
+        successorParent->removeLeftNode();
+
+        successor->insertLeftNode(leftChild);
+        successor->insertRightNode(rightChild);
+        if(successorChild != nullptr)
+            successorParent->insertLeftNode(successorChild);
+        delete node;
+        this->root = successor;
+    } else if(node->getChildren() == 0) { // root has no children
+        if(parent->leftNode() == node)
+            parent->removeLeftNode();
+        else
+            parent->removeRightNode();
+        delete node;
+
+    } else if(node->getChildren() == 1) { // root has 1 child
+        TreeNode* grandchild = (node->leftNode() != nullptr) ? node->leftNode() : node->rightNode();
+
+        if(parent->leftNode() == node) {
+            parent->removeLeftNode();
+            parent->insertLeftNode(grandchild);
+        } else {
+            parent->removeRightNode();
+            parent->insertRightNode(grandchild);
+        }
+
+        delete node;
+
+    } else if(node->getChildren() == 2) { // root has 2 children
+        TreeNode* selectedNode = node->rightNode();
+        TreeNode* selectedParent = node;
+        TreeNode* leftChild = node->leftNode();
+        TreeNode* rightChild = node->rightNode();
+        node->removeLeftNode();
+        node->removeRightNode();
+
+        while(selectedNode->leftNode() != nullptr) { // successor
+            selectedParent = selectedNode;
+            selectedNode = selectedNode->leftNode();
+        }
+
+        TreeNode* selectedChild = selectedNode->leftNode();
+        if(parent->leftNode() == node) {
+            parent->removeLeftNode();
+            parent->insertLeftNode(selectedNode);
+        } else {
+            parent->removeRightNode();
+            parent->insertRightNode(selectedNode);
+        }
+        selectedNode->insertLeftNode(leftChild);
+        selectedNode->insertRightNode(rightChild);
+
+        selectedParent->removeLeftNode();
+        selectedParent->insertLeftNode(selectedChild);
+
+        delete node;
+    }
+
+    treeResolver();
+    return true;
+}
+
+TreeNode *Tree::searchParent(int value, TreeNode *node) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return nullptr;
+    }
+    if(value == node->getValue() || node->getHeight() == 0)
+        return nullptr;
+
+    if(value < node->getValue()) {
+        if(value == node->leftNode()->getValue())
+            return node;
+        else
+            node = searchParent(value, node->leftNode());
+    } else {
+        if(value == node->rightNode()->getValue())
+            return node;
+        else
+            node = searchParent(value, node->rightNode());
+    }
+
+
+    return node;
+}
+
+
+
+
 
 
 

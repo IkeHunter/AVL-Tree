@@ -3,9 +3,9 @@
 /** =============================================
  * DONE: create basic tree structure with int
  * DONE: create insert method
- * TODO: create pre-order
- * TODO: create in-order
- * TODO: create post-order
+ * DONE: create pre-order
+ * DONE: create in-order
+ * DONE: create post-order
  * TODO: create delete method
  * TODO: create rotate left
  * TODO: create rotate right

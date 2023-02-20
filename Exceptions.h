@@ -8,11 +8,15 @@
 #include <exception>
 
 /** AddNodeToExisting: thrown when trying to add node in place of existing node without de-allocation **/
-class AddNodeToExisting: public std::exception
-{
-    virtual const char* what() const throw()
-    {
+class AddNodeToExisting: public std::exception {
+    virtual const char* what() const throw() {
         return "Invalid operation: Cannot replace existing node with a new node";
+    }
+};
+
+class NodeIsNull: public std::exception {
+    virtual const char* what() const throw() {
+        return "Invalid operation: Cannot get value of null node";
     }
 };
 

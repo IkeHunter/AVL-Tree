@@ -51,6 +51,40 @@ TEST_CASE("BST Height Pre Resolve", "[flag]"){
     inputTree.insert(18);
     REQUIRE(inputTree.getHeight() == 4);
 }
+TEST_CASE("BST Remove", "[flag]"){
+    std::vector<int> dataList = {30,25,35,33,36,12,27,5,26,32,34};
+    Tree inputTree(true);
+    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+    inputTree.remove(25); // node with 2 children
+    std::vector<int> a_inorder = inputTree.inorder();
+    std::vector<int> e_inorder = {5,12,26,27,30,32,33,34,35,36};
+    REQUIRE(a_inorder == e_inorder);
+
+    inputTree.remove(12); // node with 1 child
+    std::vector<int> a2_inorder = inputTree.inorder();
+    std::vector<int> e2_inorder = {5,26,27,30,32,33,34,35,36};
+    REQUIRE(a2_inorder == e2_inorder);
+
+    inputTree.remove(5); // node with 0 children
+    a_inorder = inputTree.inorder();
+    e_inorder = {26,27,30,32,33,34,35,36};
+    REQUIRE(a_inorder == e_inorder);
+
+    inputTree.remove(30); // root, successor with 0 children
+    a_inorder = inputTree.inorder();
+    e_inorder = {26,27,32,33,34,35,36};
+    REQUIRE(a_inorder == e_inorder);
+
+    inputTree.remove(32); // root, successor with 1 child
+    a_inorder = inputTree.inorder();
+    e_inorder = {26,27,33,34,35,36};
+    REQUIRE(a_inorder == e_inorder);
+}
 //TEST_CASE("BST Balance Calculation", "[flag]"){}
 //TEST_CASE("BST Rotations", "[flag]"){}
 
