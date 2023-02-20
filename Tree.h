@@ -27,29 +27,26 @@ class Tree {
     int height;
     bool verbose;
     bool autoResolve = true;
+    bool balanced = true;
 
+public:
     enum rotation {r_right, r_left, r_right_left, r_left_right, r_none};
     enum traversal {t_preorder, t_inorder, t_postorder, t_levelorder};
     enum relationship {f_node, f_parent, f_grandparent};
-
+private:
     /** AVL Calculations **/
     int calculateHeight(TreeNode* node=nullptr);
+    int calculateBalance(TreeNode* node= nullptr);
 
     int nodeBalanceRatio(TreeNode* node){return 0;};
     int nodeSubtreeHeight(TreeNode* node){return 0;};
 
-    rotation checkBalanced(){return rotation::r_right;};
+    rotation checkBalanced();
 
     /** Traversals **/
 //    int preorderIterator(TreeNode* node);
 //    int inorderIterator(TreeNode* node);
 //    int postorderIterator(TreeNode* node);
-
-    /** Rotations **/
-    void rotateRight(){};
-    void rotateLeft(){};
-    void rotateRightLeft(){};
-    void rotateLeftRight(){};
 
     /** Utility Methods **/
     void clearTree(TreeNode* node);
@@ -59,14 +56,17 @@ class Tree {
     TreeNode* searchParent(int value, TreeNode* node= nullptr);
 
 public:
-    /** Constructor/Destructor **/
+    /** Constructor/Destructor/Operators **/
     Tree() : verbose(false), size(0), height(0){};
     explicit Tree(bool verbose) : verbose(verbose), size(0), height(0){};
     ~Tree();
 
+
+
     /** Accessors **/
     int getSize() const {return size;};
     int getHeight() const {return height;};
+    bool getBalance() const {return balanced;};
 
     /** Printing Methods **/
     void printTree(traversal method=traversal::t_preorder);
@@ -81,6 +81,18 @@ public:
     std::vector<int> levelorder(TreeNode *node=nullptr);
     void levelCount(){};
     void removeInorder(){};
+
+    /** Rotations **/
+    void rotateLeft(TreeNode* node= nullptr);
+    void rotateLeft(int value);
+    void rotateRight(TreeNode* node= nullptr);
+    void rotateRight(int value);
+    void rotateRightLeft(TreeNode* node= nullptr);
+    void rotateRightLeft(int value);
+    void rotateLeftRight(TreeNode* node= nullptr);
+    void rotateLeftRight(int value);
+
+
 
     /** Testing Helpers **/
     bool toggleVerbose() {

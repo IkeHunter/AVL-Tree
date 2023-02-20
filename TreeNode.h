@@ -41,6 +41,7 @@ public:
 
     /** Utility **/
     void updateHeight(int value);
+    void updateBalance(int value){this->balance = value;};
 
 
 };

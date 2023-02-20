@@ -16,6 +16,7 @@ std::vector<int> Tree::concatVectors(std::vector<int> &vect1, std::vector<int> &
 Tree::~Tree() {
     clearTree(root);
 }
+
 // Recursively deletes subtree starting at node
 void Tree::clearTree(TreeNode *node) {
     if(node != nullptr) {
@@ -27,6 +28,7 @@ void Tree::clearTree(TreeNode *node) {
 // Runs after operations are performed on the tree
 void Tree::treeResolver() {
     this->calculateHeight();
+    this->calculateBalance();
     if(autoResolve) {
         this->checkBalanced();
     }
@@ -224,7 +226,7 @@ void Tree::printTree(Tree::traversal method) {
     std::cout << std::endl;
 }
 
-/**== AVL Calculations ==**/
+/**== BST Calculations ==**/
 int Tree::calculateHeight(TreeNode *node) {
     if(node == nullptr) {
         if (this->root != nullptr)
@@ -385,6 +387,193 @@ TreeNode *Tree::searchParent(int value, TreeNode *node) {
 
     return node;
 }
+
+/***====== AVL Calculations =======***/
+int Tree::calculateBalance(TreeNode *node) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return 0;
+    }
+
+    int nodeBalance = 0;
+    int leftHeight = 0;
+    int rightHeight = 0;
+
+    if(node->leftNode() != nullptr) {
+        calculateBalance(node->leftNode());
+        leftHeight = 1+node->leftNode()->getHeight();
+    }
+    if(node->rightNode() != nullptr) {
+        calculateBalance(node->rightNode());
+        rightHeight = 1+node->rightNode()->getHeight();
+    }
+
+    nodeBalance = leftHeight - rightHeight;
+    node->updateBalance(nodeBalance);
+
+//    std::cout << "balance: " << nodeBalance << std::endl;
+    if((nodeBalance < -1) || (nodeBalance > 1))
+        this->balanced = false;
+//        std::cout << "balance: " << nodeBalance << std::endl;
+
+
+    return 0;
+}
+
+Tree::rotation Tree::checkBalanced() {
+    return Tree::r_left_right;
+}
+
+/**== Rotations ==**/
+void Tree::rotateLeft(int value) {
+    TreeNode* node = search(value);
+    if(node != nullptr)
+        rotateLeft(node);
+    else
+        std::cout << "node was null" << std::endl;
+}
+
+void Tree::rotateRight(int value) {
+    TreeNode* node = search(value);
+    if(node != nullptr)
+        rotateRight(node);
+    else
+        std::cout << "node was null" << std::endl;
+}
+void Tree::rotateRightLeft(int value) {
+    TreeNode* node = search(value);
+    if(node != nullptr)
+        rotateRightLeft(node);
+    else
+        std::cout << "node was null" << std::endl;
+}
+void Tree::rotateLeftRight(int value) {
+    TreeNode* node = search(value);
+    if(node != nullptr)
+        rotateLeftRight(node);
+    else
+        std::cout << "node was null" << std::endl;
+}
+void Tree::rotateLeft(TreeNode* node) {
+    TreeNode* nodeParent = nullptr;
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return;
+    } else {
+        nodeParent = searchParent(node->getValue());
+    }
+    if(node->rightNode()) {
+        TreeNode* newNode = node->rightNode();
+        node->removeRightNode(); // removes newNode
+
+        if(newNode->leftNode() != nullptr) { // remove grandchild if it exists
+            TreeNode* grandchild = newNode->leftNode();
+            newNode->removeLeftNode(); // removes grandchild
+            node->insertRightNode(grandchild);
+        }
+
+        newNode->insertLeftNode(node); // inserts node as child to newNode
+
+        if(nodeParent != nullptr) {
+            if (nodeParent->leftNode() == node) {
+                nodeParent->removeLeftNode();
+                nodeParent->insertLeftNode(newNode);
+            } else {
+                nodeParent->removeRightNode();
+                nodeParent->insertRightNode(newNode);
+            }
+
+        } else
+            this->root = newNode;
+    }
+
+
+    treeResolver();
+
+}
+
+
+
+
+void Tree::rotateRight(TreeNode* node) {
+    TreeNode* nodeParent = nullptr;
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return;
+    } else {
+        nodeParent = searchParent(node->getValue());
+    }
+
+    if(node->leftNode() != nullptr) {
+        TreeNode* newNode = node->leftNode();
+        node->removeLeftNode();
+
+        if(newNode->rightNode() != nullptr) { // move grandchild if it exists
+            TreeNode* grandchild = newNode->rightNode();
+            newNode->removeRightNode();
+            node->insertLeftNode(grandchild);
+        }
+
+        newNode->insertRightNode(node);
+
+        if(nodeParent != nullptr) {
+            if (nodeParent->rightNode() == node) {
+                nodeParent->removeRightNode();
+                nodeParent->insertRightNode(newNode);
+            } else {
+                nodeParent->removeLeftNode();
+                nodeParent->insertLeftNode(newNode);
+            }
+
+        } else
+            this->root = newNode;
+
+    }
+
+
+    treeResolver();
+
+}
+
+void Tree::rotateRightLeft(TreeNode *node) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return;
+    }
+    this->rotateRight(node->rightNode());
+    this->rotateLeft(node);
+}
+
+
+
+void Tree::rotateLeftRight(TreeNode *node) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return;
+    }
+    this->rotateLeft(node->leftNode());
+    this->rotateRight(node);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

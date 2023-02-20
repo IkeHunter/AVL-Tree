@@ -53,7 +53,7 @@ TEST_CASE("BST Height Pre Resolve", "[flag]"){
 }
 TEST_CASE("BST Remove", "[flag]"){
     std::vector<int> dataList = {30,25,35,33,36,12,27,5,26,32,34};
-    Tree inputTree(true);
+    Tree inputTree;
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
@@ -85,8 +85,108 @@ TEST_CASE("BST Remove", "[flag]"){
     e_inorder = {26,27,33,34,35,36};
     REQUIRE(a_inorder == e_inorder);
 }
-//TEST_CASE("BST Balance Calculation", "[flag]"){}
-//TEST_CASE("BST Rotations", "[flag]"){}
+TEST_CASE("AVL Balance Calculation", "[flag]"){
+    std::vector<int> dataList = {30,25,35,33,36,12,27,5,26,32,34};
+    Tree inputTree;
+    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+    REQUIRE(inputTree.getBalance() == true);
+    inputTree.remove(36);
+    REQUIRE(inputTree.getBalance() == false);
+
+}
+TEST_CASE("AVL Left Rotation", "[flag]"){
+    std::vector<int> dataList = {10,9,15,14,20,19,21};
+    Tree inputTree;
+    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+
+    inputTree.rotateLeft();
+    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> e_preorder = {15,10,9,14,20,19,21};
+    REQUIRE(a_preorder == e_preorder);
+
+    Tree inputTree2;
+    inputTree2.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree2.insert(data);
+    }
+
+    inputTree2.rotateLeft(15);
+    std::vector<int> a2_preorder = inputTree2.preorder();
+    std::vector<int> e2_preorder = {10,9,20,15,14,19,21};
+    REQUIRE(a2_preorder == e2_preorder);
+
+}
+TEST_CASE("AVL Right Rotation", "[flag]"){
+    std::vector<int> dataList = {21,19,15,10,16,20,22};
+    Tree inputTree;
+    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+
+    inputTree.rotateRight();
+    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> e_preorder = {19,15,10,16,21,20,22};
+    REQUIRE(a_preorder == e_preorder);
+
+    Tree inputTree2;
+    inputTree2.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree2.insert(data);
+    }
+
+    inputTree2.rotateRight(19);
+    std::vector<int> a2_preorder = inputTree2.preorder();
+    std::vector<int> e2_preorder = {21,15,10,19,16,20,22};
+    REQUIRE(a2_preorder == e2_preorder);
+
+}
+TEST_CASE("AVL RightLeft Rotation", "[flag]"){
+    std::vector<int> dataList = {10,13,12};
+    Tree inputTree;
+    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+
+    inputTree.rotateRightLeft();
+    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> e_preorder = {12,10,13};
+    REQUIRE(a_preorder == e_preorder);
+
+}
+TEST_CASE("AVL LeftRight Rotation", "[flag]"){
+    std::vector<int> dataList = {13,10,12};
+    Tree inputTree;
+    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+
+    inputTree.rotateLeftRight();
+    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> e_preorder = {12,10,13};
+    REQUIRE(a_preorder == e_preorder);
+}
+
 
 
 
