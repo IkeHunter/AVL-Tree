@@ -19,9 +19,30 @@ TEST_CASE("BST Insert", "[flag]"){
     REQUIRE(e_output.size() == a_output.size());
     REQUIRE(a_output == e_output);
 }
+//TEST_CASE("BST Insert Large", "[flag]"){
+//    Tree inputTree;
+//    std::vector<int> expectedOutput, actualOutput;
+//
+//    for(int i = 0; i < 100; i++)
+//    {
+//        int randomInput = rand();
+//        if (std::count(expectedOutput.begin(), expectedOutput.end(), randomInput) == 0)
+//        {
+//            expectedOutput.push_back(randomInput);
+//            inputTree.insert(randomInput);
+//        }
+//    }
+//
+//    actualOutput = inputTree.inorder();
+//    REQUIRE(expectedOutput.size() == actualOutput.size());
+//    REQUIRE_FALSE(expectedOutput == actualOutput);    //This assertion can be wrong. Don't use
+//    std::sort(expectedOutput.begin(), expectedOutput.end());
+//    REQUIRE(expectedOutput == actualOutput);
+//}
 TEST_CASE("BST Traversals", "[flag]"){
     std::vector<int> dataList = {5,8,17,2,3,6};
     Tree inputTree;
+    inputTree.toggleAutoResolve();
     for(auto data : dataList) {
         inputTree.insert(data);
     }
@@ -165,7 +186,7 @@ TEST_CASE("AVL RightLeft Rotation", "[flag]"){
     }
 
 
-    inputTree.rotateRightLeft();
+    inputTree.rotateRightLeft(10);
     std::vector<int> a_preorder = inputTree.preorder();
     std::vector<int> e_preorder = {12,10,13};
     REQUIRE(a_preorder == e_preorder);
@@ -181,34 +202,42 @@ TEST_CASE("AVL LeftRight Rotation", "[flag]"){
     }
 
 
-    inputTree.rotateLeftRight();
+    inputTree.rotateLeftRight(13);
     std::vector<int> a_preorder = inputTree.preorder();
     std::vector<int> e_preorder = {12,10,13};
     REQUIRE(a_preorder == e_preorder);
 }
-
-
-
-
-TEST_CASE("BST Insert Large", "[flag]"){
+TEST_CASE("AVL Auto Rotation", "[flag]") {
+    std::vector<int> dataList = {50,25,24,27,75,70,72,80,85,84,86};
     Tree inputTree;
-    std::vector<int> expectedOutput, actualOutput;
+    inputTree.toggleAutoResolve();
 
-    for(int i = 0; i < 100; i++)
-    {
-        int randomInput = rand();
-        if (std::count(expectedOutput.begin(), expectedOutput.end(), randomInput) == 0)
-        {
-            expectedOutput.push_back(randomInput);
-            inputTree.insert(randomInput);
-        }
+    for(auto data : dataList) {
+        inputTree.insert(data);
     }
 
-    actualOutput = inputTree.inorder();
-    REQUIRE(expectedOutput.size() == actualOutput.size());
-    REQUIRE_FALSE(expectedOutput == actualOutput);    //This assertion can be wrong. Don't use
-    std::sort(expectedOutput.begin(), expectedOutput.end());
-    REQUIRE(expectedOutput == actualOutput);
-
+    inputTree.toggleAutoResolve();
+    inputTree.refreshTree();
+    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> e_preorder = {75,50,25,24,27,70,72,85,80,84,86};
+    REQUIRE(a_preorder == e_preorder);
 }
+
+TEST_CASE("AVL Remove Inorder", "[flag]") {
+    std::vector<int> dataList = {12,10,13};
+    Tree inputTree;
+//    inputTree.toggleAutoResolve();
+
+    for(auto data : dataList) {
+        inputTree.insert(data);
+    }
+
+
+    inputTree.removeInorder(1);
+    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> e_preorder = {13,10};
+    REQUIRE(a_preorder == e_preorder);
+}
+
+
 

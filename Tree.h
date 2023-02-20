@@ -41,18 +41,15 @@ private:
     int nodeBalanceRatio(TreeNode* node){return 0;};
     int nodeSubtreeHeight(TreeNode* node){return 0;};
 
-    rotation checkBalanced();
+//    rotation checkBalanced();
+    void performRotation(TreeNode* node);
+    void balanceTree(TreeNode* node= nullptr);
 
-    /** Traversals **/
-//    int preorderIterator(TreeNode* node);
-//    int inorderIterator(TreeNode* node);
-//    int postorderIterator(TreeNode* node);
 
     /** Utility Methods **/
     void clearTree(TreeNode* node);
     void treeResolver();
     static std::vector<int> concatVectors(std::vector<int> &vect1, std::vector<int> &vect2);
-    bool verifyNode(TreeNode* node);
     TreeNode* searchParent(int value, TreeNode* node= nullptr);
 
 public:
@@ -60,8 +57,6 @@ public:
     Tree() : verbose(false), size(0), height(0){};
     explicit Tree(bool verbose) : verbose(verbose), size(0), height(0){};
     ~Tree();
-
-
 
     /** Accessors **/
     int getSize() const {return size;};
@@ -79,8 +74,8 @@ public:
     std::vector<int> inorder(TreeNode *node=nullptr);
     std::vector<int> postorder(TreeNode *node=nullptr);
     std::vector<int> levelorder(TreeNode *node=nullptr);
-    void levelCount(){};
-    void removeInorder(){};
+    int levelCount() const { return height + 1; };
+    bool removeInorder(int value);
 
     /** Rotations **/
     void rotateLeft(TreeNode* node= nullptr);
@@ -103,6 +98,7 @@ public:
         this->autoResolve = !this->autoResolve;
         return this->autoResolve;
     }
+    void refreshTree() {this->treeResolver();};
 
 };
 

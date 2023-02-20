@@ -30,7 +30,7 @@ void Tree::treeResolver() {
     this->calculateHeight();
     this->calculateBalance();
     if(autoResolve) {
-        this->checkBalanced();
+        this->balanceTree();
     }
     if(verbose) {
         std::cout << "Preorder:" << std::endl;
@@ -281,33 +281,52 @@ bool Tree::remove(int value) {
     TreeNode* parent = searchParent(value);
 
     if(node == this->root) { // node is root
-        TreeNode* successor = node->rightNode();
-        TreeNode* successorParent = node;
-        TreeNode* successorChild = nullptr;
+        if(node->getChildren() == 2) {
+            TreeNode* successor = node->rightNode();
+            TreeNode* successorParent = node;
+            TreeNode* successorChild = nullptr;
 
-        TreeNode* leftChild = node->leftNode();
-        TreeNode* rightChild = node->rightNode();
+            TreeNode* leftChild = node->leftNode();
+            TreeNode* rightChild = node->rightNode();
 
-        while(successor->leftNode() != nullptr) {
-            successorParent = successor;
-            successor = successor->leftNode();
+            if(successor->leftNode() != nullptr) {
+                while(successor->leftNode() != nullptr) {
+                    successorParent = successor;
+                    successor = successor->leftNode();
+                }
+            } else {
+                successorParent = nullptr;
+            }
+
+            if(successor->getChildren() == 1) {
+                successorChild = successor->rightNode();
+                successor->removeRightNode();
+            }
+
+
+            node->removeRightNode();
+            node->removeLeftNode();
+            if(successorParent != nullptr) {
+                successorParent->removeLeftNode();
+                if(successorChild != nullptr)
+                    successorParent->insertLeftNode(successorChild);
+            }
+
+            if(successor != leftChild)
+                successor->insertLeftNode(leftChild);
+            if(successor != rightChild)
+                successor->insertRightNode(rightChild);
+
+            delete node;
+            this->root = successor;
+        } else if(node->getChildren() == 1)  {
+            this->root = (node->leftNode() != nullptr) ? node->leftNode() : node->rightNode();
+            delete node;
+        } else if(node->getChildren() == 0) {
+            this->root = nullptr;
+            delete node;
         }
-        if(successor->getChildren() == 1) {
-            successorChild = successor->rightNode();
-            successor->removeRightNode();
-        }
 
-
-        node->removeRightNode();
-        node->removeLeftNode();
-        successorParent->removeLeftNode();
-
-        successor->insertLeftNode(leftChild);
-        successor->insertRightNode(rightChild);
-        if(successorChild != nullptr)
-            successorParent->insertLeftNode(successorChild);
-        delete node;
-        this->root = successor;
     } else if(node->getChildren() == 0) { // root has no children
         if(parent->leftNode() == node)
             parent->removeLeftNode();
@@ -422,9 +441,9 @@ int Tree::calculateBalance(TreeNode *node) {
     return 0;
 }
 
-Tree::rotation Tree::checkBalanced() {
-    return Tree::r_left_right;
-}
+//Tree::rotation Tree::checkBalanced() {
+//    return Tree::r_left_right;
+//}
 
 /**== Rotations ==**/
 void Tree::rotateLeft(int value) {
@@ -563,6 +582,92 @@ void Tree::rotateLeftRight(TreeNode *node) {
     }
     this->rotateLeft(node->leftNode());
     this->rotateRight(node);
+}
+
+void Tree::performRotation(TreeNode *node) {
+    Tree::rotation method = r_right;
+
+    if(!node->isBalanced()) {
+        int nodeBalance = node->getBalance();
+        int childBalance = 0;
+
+        if(nodeBalance > 1) { // parent: +2
+            childBalance = node->leftNode()->getBalance();
+            if(node->leftNode()->isBalanced()) {
+                switch(childBalance) {
+                    case 1: // child: +1
+                    case 0: // child: 0
+                        method = r_right;
+                        break;
+                    case -1: // child: -1
+                        method = r_left_right;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+        } else { // parent: -2
+            childBalance = node->rightNode()->getBalance();
+            if(node->rightNode()->isBalanced()) {
+                switch(childBalance) {
+                    case -1: // child: -1
+                    case 0: // child: 0
+                        method = r_left;
+                        break;
+                    case 1: // child: +1
+                        method = r_right_left;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    switch(method) {
+        case r_left:
+            this->rotateLeft(node);
+            break;
+        case r_right:
+            this->rotateRight(node);
+            break;
+        case r_left_right:
+            this->rotateLeftRight(node);
+            break;
+        case r_right_left:
+            this->rotateRightLeft(node);
+            break;
+        default:
+            break;
+    }
+}
+
+void Tree::balanceTree(TreeNode *node) {
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return;
+    }
+
+    if(node->leftNode() != nullptr)
+        balanceTree(node->leftNode());
+    if(node->rightNode() != nullptr)
+        balanceTree(node->rightNode());
+
+    if(!node->isBalanced())
+        performRotation(node);
+}
+
+bool Tree::removeInorder(int value) {
+    std::vector<int> dataList = this->inorder();
+    if(value >= dataList.size()) {
+        return false;
+    }
+    int selectedInt = dataList.at(value);
+    this->remove(selectedInt);
+    return true;
 }
 
 

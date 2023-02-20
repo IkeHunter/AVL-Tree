@@ -64,20 +64,20 @@ void TreeNode::updateHeight(int value) {
     this->height = value;
 }
 
-//int TreeNode::updateHeight() {
-//    int leftSide = 0;
-//    int rightSide = 0;
-//
-//    if(this->left != nullptr)
-//        leftSide = this->left->updateHeight() + 1;
-//    if(this->right != nullptr)
-//        leftSide = this->right->updateHeight() + 1;
-//
-//    int newHeight = (leftSide >= rightSide) ? leftSide : rightSide;
-//    this->height = newHeight;
-//
-//    return newHeight;
-//}
+void TreeNode::updateBalance(int value) {
+    this->balance = value;
+}
+bool TreeNode::isBalanced() const {
+        switch(this->balance) {
+        case -1:
+        case 0:
+        case 1:
+            return true;
+        default:
+            return false;
+    }
+}
+
 
 
 

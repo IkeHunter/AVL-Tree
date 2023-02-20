@@ -6,12 +6,12 @@
  * DONE: create pre-order
  * DONE: create in-order
  * DONE: create post-order
- * TODO: create delete method
- * TODO: create rotate left
- * TODO: create rotate right
- * TODO: create rotate left-right
- * TODO: add recursive count attribute to node
- * TODO: create dynamic AVL methods
+ * DONE: create delete method
+ * DONE: create rotate left
+ * DONE: create rotate right
+ * DONE: create rotate left-right
+ * DONE: add recursive count attribute to node
+ * TODO: create dynamic AVL methods, including dynamic rotations
  * TODO: change basic int AVL to student AVL
  * TODO: implement input parsing
  * TODO: connect methods and finish rubric
