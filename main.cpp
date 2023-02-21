@@ -11,7 +11,7 @@
  * DONE: create rotate right
  * DONE: create rotate left-right
  * DONE: add recursive count attribute to node
- * TODO: create dynamic AVL methods, including dynamic rotations
+ * DONE: create dynamic AVL methods, including dynamic rotations
  * TODO: change basic int AVL to student AVL
  * TODO: implement input parsing
  * TODO: connect methods and finish rubric

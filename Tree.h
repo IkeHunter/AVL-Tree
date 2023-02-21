@@ -67,7 +67,7 @@ public:
     void printTree(traversal method=traversal::t_preorder);
 
     /** Required Methods **/
-    void insert(int value, TreeNode *base= nullptr);
+    void insert(int value, std::string name, TreeNode *base = nullptr);
     TreeNode* search(int val, TreeNode* node= nullptr, relationship member=f_node);
     bool remove(int value);
     std::vector<int> preorder(TreeNode *node=nullptr);

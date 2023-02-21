@@ -11,8 +11,8 @@
 
 TEST_CASE("BST Insert", "[flag]"){
     Tree inputTree;
-    inputTree.insert(3);
-    inputTree.insert(2);
+    inputTree.insert(3, std::string());
+    inputTree.insert(2, std::string());
 
     std::vector<int> a_output = inputTree.inorder();
     std::vector<int> e_output = {2,3};
@@ -44,7 +44,7 @@ TEST_CASE("BST Traversals", "[flag]"){
     Tree inputTree;
     inputTree.toggleAutoResolve();
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
     std::vector<int> a_preorder = inputTree.preorder();
@@ -65,11 +65,11 @@ TEST_CASE("BST Height Pre Resolve", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
     REQUIRE(inputTree.getHeight() == 3);
-    inputTree.insert(18);
+    inputTree.insert(18, std::string());
     REQUIRE(inputTree.getHeight() == 4);
 }
 TEST_CASE("BST Remove", "[flag]"){
@@ -78,7 +78,7 @@ TEST_CASE("BST Remove", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
     inputTree.remove(25); // node with 2 children
@@ -112,7 +112,7 @@ TEST_CASE("AVL Balance Calculation", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
     REQUIRE(inputTree.getBalance() == true);
@@ -126,7 +126,7 @@ TEST_CASE("AVL Left Rotation", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
 
@@ -139,7 +139,7 @@ TEST_CASE("AVL Left Rotation", "[flag]"){
     inputTree2.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree2.insert(data);
+        inputTree2.insert(data, std::string());
     }
 
     inputTree2.rotateLeft(15);
@@ -154,7 +154,7 @@ TEST_CASE("AVL Right Rotation", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
 
@@ -167,7 +167,7 @@ TEST_CASE("AVL Right Rotation", "[flag]"){
     inputTree2.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree2.insert(data);
+        inputTree2.insert(data, std::string());
     }
 
     inputTree2.rotateRight(19);
@@ -182,7 +182,7 @@ TEST_CASE("AVL RightLeft Rotation", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
 
@@ -198,7 +198,7 @@ TEST_CASE("AVL LeftRight Rotation", "[flag]"){
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
 
@@ -213,7 +213,7 @@ TEST_CASE("AVL Auto Rotation", "[flag]") {
     inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
     inputTree.toggleAutoResolve();
@@ -229,7 +229,7 @@ TEST_CASE("AVL Remove Inorder", "[flag]") {
 //    inputTree.toggleAutoResolve();
 
     for(auto data : dataList) {
-        inputTree.insert(data);
+        inputTree.insert(data, std::string());
     }
 
 

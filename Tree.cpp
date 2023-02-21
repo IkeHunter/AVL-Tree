@@ -47,8 +47,8 @@ void Tree::treeResolver() {
 
 /** Manipulator Methods **/
 // Inserts node into tree at given value
-void Tree::insert(int value, TreeNode *base) {
-    auto node = new TreeNode(value);
+void Tree::insert(int value, std::string name, TreeNode *base) {
+    auto node = new TreeNode(value, name);
 
     if(this->root == nullptr) {
         this->root = node;
@@ -57,31 +57,19 @@ void Tree::insert(int value, TreeNode *base) {
     if(base == nullptr)
         base = this->root;
 
-    if(value < base->getValue()) {
+    if(value < base->getId()) {
         try {
             base->insertLeftNode(node);
         } catch (AddNodeToExisting& _){
-            insert(value, base->leftNode());
+            insert(value, std::string(), base->leftNode());
         }
     } else {
         try {
             base->insertRightNode(node);
         } catch (AddNodeToExisting& _){
-            insert(value, base->rightNode());
+            insert(value, std::string(), base->rightNode());
         }
     }
-
-//    if(base->getHeight() > 0) {
-//        if(value < base->getValue())
-//            insert(value, base->leftNode());
-//        else
-//            insert(value, base->rightNode());
-//    } else {
-//        if(value < base->getValue())
-//            base->insertLeftNode(node);
-//        else
-//            base->insertRightNode(node);
-//    }
 
     this->treeResolver();
 }
@@ -99,7 +87,7 @@ std::vector<int> Tree::preorder(TreeNode *node) {
 //    if(!Tree::verifyNode(node))
 //        return nodeVector;
 
-    nodeVector.push_back(node->getValue()); // Node
+    nodeVector.push_back(node->getId()); // Node
     if(node->leftNode() != nullptr) { // Left Subtree
         std::vector<int> leftVector = this->preorder(node->leftNode());
         concatVectors(nodeVector, leftVector);
@@ -126,7 +114,7 @@ std::vector<int> Tree::inorder(TreeNode *node) {
         std::vector<int> leftVector = this->inorder(node->leftNode());
         concatVectors(nodeVector, leftVector);
     }
-    nodeVector.push_back(node->getValue()); // Node
+    nodeVector.push_back(node->getId()); // Node
     if(node->rightNode() != nullptr) { // Right Subtree
         std::vector<int> rightVector = this->inorder(node->rightNode());
         concatVectors(nodeVector, rightVector);
@@ -153,7 +141,7 @@ std::vector<int> Tree::postorder(TreeNode *node) {
         std::vector<int> rightVector = this->postorder(node->rightNode());
         concatVectors(nodeVector, rightVector);
     }
-    nodeVector.push_back(node->getValue()); // Node
+    nodeVector.push_back(node->getId()); // Node
 
     return nodeVector;
 }
@@ -166,7 +154,7 @@ std::vector<int> Tree::levelorder(TreeNode *node) {
 
     auto addChild = [&](TreeNode* node) {
         children.push(node);
-        nodeVector.push_back(node->getValue());
+        nodeVector.push_back(node->getId());
     };
 
     if(this->root == nullptr)
@@ -175,7 +163,7 @@ std::vector<int> Tree::levelorder(TreeNode *node) {
         node = this->root;
 
     currentLevel.push(node);
-    nodeVector.push_back(node->getValue());
+    nodeVector.push_back(node->getId());
 
     for (int i = 0; i < this->height; i++) {
 
@@ -258,16 +246,16 @@ TreeNode *Tree::search(int val, TreeNode* node, relationship member) {
         else
             return nullptr;
     }
-    if(val == node->getValue())
+    if(val == node->getId())
         return node;
 
 
 
     if(node->getHeight() == 0)
         return nullptr;
-    else if(val < node->getValue())
+    else if(val < node->getId())
         node = search(val, node->leftNode());
-    else if(val > node->getValue())
+    else if(val > node->getId())
         node = search(val, node->rightNode());
 
     return node;
@@ -388,16 +376,16 @@ TreeNode *Tree::searchParent(int value, TreeNode *node) {
         else
             return nullptr;
     }
-    if(value == node->getValue() || node->getHeight() == 0)
+    if(value == node->getId() || node->getHeight() == 0)
         return nullptr;
 
-    if(value < node->getValue()) {
-        if(value == node->leftNode()->getValue())
+    if(value < node->getId()) {
+        if(value == node->leftNode()->getId())
             return node;
         else
             node = searchParent(value, node->leftNode());
     } else {
-        if(value == node->rightNode()->getValue())
+        if(value == node->rightNode()->getId())
             return node;
         else
             node = searchParent(value, node->rightNode());
@@ -483,7 +471,7 @@ void Tree::rotateLeft(TreeNode* node) {
         else
             return;
     } else {
-        nodeParent = searchParent(node->getValue());
+        nodeParent = searchParent(node->getId());
     }
     if(node->rightNode()) {
         TreeNode* newNode = node->rightNode();
@@ -526,7 +514,7 @@ void Tree::rotateRight(TreeNode* node) {
         else
             return;
     } else {
-        nodeParent = searchParent(node->getValue());
+        nodeParent = searchParent(node->getId());
     }
 
     if(node->leftNode() != nullptr) {

@@ -11,7 +11,8 @@
 
 
 class TreeNode {
-    int val;
+    int id;
+    std::string name;
     TreeNode* left;
     TreeNode* right;
 
@@ -23,14 +24,14 @@ class TreeNode {
     void calculateBalance() {}; // get balance value -1, 0, 1, based on AVL
 
 public:
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, std::string &name) : id(x), name(name), left(nullptr), right(nullptr) {}
     TreeNode* rightNode() const;
     TreeNode* leftNode() const;
 
     /** Accessors **/
     int getHeight() const {return height;};
     int getBalance() const {return balance;};
-    int getValue() const {return val;};
+    int getId() const {return id;};
     int getChildren() const {return children;};
 
     /** Mutators **/
