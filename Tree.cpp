@@ -47,7 +47,7 @@ void Tree::treeResolver() {
 
 /** Manipulator Methods **/
 // Inserts node into tree at given value
-void Tree::insert(int value, std::string name, TreeNode *base) {
+void Tree::insert(unsigned int value, std::string name, TreeNode *base) {
     auto node = new TreeNode(value, name);
 
     if(this->root == nullptr) {

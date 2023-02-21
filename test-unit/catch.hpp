@@ -13147,7 +13147,9 @@ namespace Catch {
 namespace Catch {
 
     class Session : NonCopyable {
+
     public:
+
 
         Session();
         ~Session() override;
@@ -17438,6 +17440,7 @@ namespace Catch {
 extern "C" int wmain (int argc, wchar_t * argv[], wchar_t * []) {
 #else
 // Standard C/C++ main entry point
+//
 int main (int argc, char * argv[]) {
 #endif
 

@@ -11,8 +11,9 @@
 
 
 class TreeNode {
-    int id;
+    unsigned int id;
     std::string name;
+
     TreeNode* left;
     TreeNode* right;
 
@@ -31,7 +32,7 @@ public:
     /** Accessors **/
     int getHeight() const {return height;};
     int getBalance() const {return balance;};
-    int getId() const {return id;};
+    unsigned int getId() const {return id;};
     int getChildren() const {return children;};
 
     /** Mutators **/

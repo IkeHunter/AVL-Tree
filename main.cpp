@@ -1,4 +1,7 @@
 #include <iostream>
+#include "Commands.h"
+#include "Tree.h"
+using namespace std;
 
 /** =============================================
  * DONE: create basic tree structure with int
@@ -25,18 +28,67 @@
  * configure main.
  * **/
 
-//int main() {
-//    std::cout << "Hello, World!" << std::endl;
-//    return 0;
-//}
 
-//#define CATCH_CONFIG_RUNNER
-//#include "test-unit/catch.hpp"
-//
-//int main(int argc, char *argv[])
-//{
-////    MPI_Init(argc, argv);
-//    int result = Catch::Session().run(argc, argv);
-////    MPI_Finalize();
-//    return result;
-//}
+int main(int argc, char *argv[]) {
+    Commands commandPallet;
+
+    int commandsCount;
+    Tree inputTree;
+
+    cin >> commandsCount;
+    cin.ignore();
+
+    for(int i = 0; i < commandsCount; i++) {
+        string input;
+        getline(cin, input);
+
+        Commands::commandData cc = commandPallet.parseInput(input);
+        switch(cc.type) {
+            case(Commands::c_insert):
+                cout << "insert" << endl;
+                inputTree.insert(cc.id, cc.name);
+                break;
+            case(Commands::c_remove):
+                cout << "remove" << endl;
+                inputTree.remove(cc.id);
+                break;
+            case(Commands::c_search_id):
+                cout << "searchId" << endl;
+                inputTree.search(cc.id);
+                break;
+            case(Commands::c_search_name):
+                cout << "searchName" << endl;
+                break;
+            case(Commands::c_print_in):
+                cout << "printInorder" << endl;
+                inputTree.printTree(Tree::t_inorder);
+                break;
+            case(Commands::c_print_pre):
+                cout << "printPreorder" << endl;
+                inputTree.printTree(Tree::t_preorder);
+                break;
+            case(Commands::c_print_post):
+                cout << "printPostorder" << endl;
+                inputTree.printTree(Tree::t_postorder);
+                break;
+            case(Commands::c_print_level):
+                cout << "printLevelCount" << endl;
+                cout << inputTree.getHeight() << endl;
+                break;
+            case(Commands::c_remove_in):
+                cout << "removeInorder" << endl;
+                inputTree.removeInorder(cc.id);
+                break;
+            default:
+                cout << "invalid" << endl;
+                break;
+        }
+
+
+    }
+
+
+
+
+    return 0;
+}
