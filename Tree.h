@@ -10,6 +10,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <stack>
 #include "TreeNode.h"
 #include "Exceptions.h"
 
@@ -50,7 +51,9 @@ private:
     void clearTree(TreeNode* node);
     void treeResolver();
     static std::vector<int> concatVectors(std::vector<int> &vect1, std::vector<int> &vect2);
+    static std::vector<std::string> concatVectors(std::vector<std::string> &vect1, std::vector<std::string> &vect2);
     TreeNode* searchParent(int value, TreeNode* node= nullptr);
+    std::vector<int> getNodeInOrder(int value, TreeNode* node=nullptr);
 
 public:
     /** Constructor/Destructor/Operators **/
@@ -67,15 +70,20 @@ public:
     void printTree(traversal method=traversal::t_preorder);
 
     /** Required Methods **/
-    void insert(unsigned int value, std::string name, TreeNode *base = nullptr);
+    bool insert(unsigned int value, std::string name, TreeNode *base = nullptr);
     TreeNode* search(int val, TreeNode* node= nullptr, relationship member=f_node);
+    std::vector<TreeNode*> searchName(std::string& name, std::vector<TreeNode*>& nodes, TreeNode* base= nullptr);
     bool remove(int value);
-    std::vector<int> preorder(TreeNode *node=nullptr);
-    std::vector<int> inorder(TreeNode *node=nullptr);
-    std::vector<int> postorder(TreeNode *node=nullptr);
-    std::vector<int> levelorder(TreeNode *node=nullptr);
+    std::vector<int> preorderInt(TreeNode *node= nullptr);
+    std::vector<int> inorderInt(TreeNode *node= nullptr);
+    std::vector<int> postorderInt(TreeNode *node= nullptr);
+    std::vector<int> levelorderInt(TreeNode *node= nullptr);
+    std::vector<std::string> preorder(TreeNode *node= nullptr);
+    std::vector<std::string> inorder(TreeNode *node= nullptr);
+    std::vector<std::string> postorder(TreeNode *node= nullptr);
+
     int levelCount() const { return height + 1; };
-    bool removeInorder(int value);
+    bool removeInorder(int value, std::stack<TreeNode*>* stack=nullptr);
 
     /** Rotations **/
     void rotateLeft(TreeNode* node= nullptr);

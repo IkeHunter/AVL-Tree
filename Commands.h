@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <regex>
 
 #ifndef AVL_TREE_COMMANDS_H
 #define AVL_TREE_COMMANDS_H
@@ -26,132 +27,134 @@ struct Commands {
         std::vector<std::string> inputList;
         std::string word;
 
-        while(ss >> word) {
+        while (ss >> word) {
             inputList.push_back(word);
         }
-        if(inputList.size() > 3)
-            return completeCommand;
+//        if (inputList.size() > 3)
+//            return completeCommand;
 
         std::string first = inputList[0];
 
-        if(first == "insert") {
+        if (first == "insert") {
             completeCommand.type = c_insert;
-        } else if(first == "remove"){
+        } else if (first == "remove") {
             completeCommand.type = c_remove;
-        } else if(first == "search"){
-            if(inputList.size() < 2)
+        } else if (first == "search") {
+            if (inputList.size() < 2)
                 return commandData(c_invalid);
             try {
                 std::stoi(inputList[1]);
                 completeCommand.type = c_search_id;
-            } catch(...) {
+            } catch (...) {
                 completeCommand.type = c_search_name;
             }
-        } else if(first == "printInorder"){
+        } else if (first == "printInorder") {
             completeCommand.type = c_print_in;
-        } else if(first == "printPreorder"){
+        } else if (first == "printPreorder") {
             completeCommand.type = c_print_pre;
-        } else if(first == "printPostorder"){
+        } else if (first == "printPostorder") {
             completeCommand.type = c_print_post;
-        } else if(first == "printLevelCount"){
+        } else if (first == "printLevelCount") {
             completeCommand.type = c_print_level;
-        } else if(first == "removeInorder"){
+        } else if (first == "removeInorder") {
             completeCommand.type = c_remove_in;
         } else {
             return commandData(c_invalid);
         }
 
-        switch(completeCommand.type) {
+        std::string name;
+        std::string inputId;
+        std::regex str_exp("[[:alpha:][:blank:]]+");
+        switch (completeCommand.type) {
             case c_insert:
-                if(inputList.size() != 3)
+                if (inputList.size() < 3)
                     return commandData(c_invalid);
-                completeCommand.name = inputList[1];
+                name = "";
+                for(int i = 1; i < inputList.size() - 1; i++) {
+                    std::string temp = inputList[i];
+
+                    if(temp.at(0) == '"') {
+                        auto it = temp.begin();
+                        temp.erase(it);
+                        it = temp.end();
+                        it--;
+                        temp.erase(it);
+                    }
+                    name += temp;
+                    if(i != inputList.size()-2) {
+                        name += " ";
+                    }
+                }
+
+                if(std::regex_match(name, str_exp)) {
+                    completeCommand.name = name;
+                    inputId = inputList[inputList.size()-1];
+                } else
+                    return commandData(c_invalid);
+
+                if(inputId.length() != 8)
+                    return commandData(c_invalid);
                 try {
-                    completeCommand.id = stoi(inputList[2]);
-                } catch(...) {
+                    completeCommand.id = stoi(inputId);
+                } catch (...) {
                     return commandData(c_invalid);
                 }
                 break;
             case c_remove:
             case c_search_id:
-                if(inputList.size() != 2)
+                if (inputList.size() != 2)
+                    return commandData(c_invalid);
+                inputId = inputList[1];
+                if(inputId.length() != 8)
                     return commandData(c_invalid);
                 try {
-                    completeCommand.id = stoi(inputList[1]);
-                } catch(...) {
+                    completeCommand.id = stoi(inputId);
+                } catch (...) {
                     return commandData(c_invalid);
                 }
                 break;
             case c_search_name:
-                if(inputList.size() != 2)
+                if (inputList.size() < 2)
                     return commandData(c_invalid);
-                completeCommand.name = inputList[1];
+                name = "";
+                for(int i = 1; i < inputList.size(); i++) {
+                    std::string temp = inputList[i];
+
+                    if(temp.at(0) == '"') {
+                        auto it = temp.begin();
+                        temp.erase(it);
+                        it = temp.end();
+                        it--;
+                        temp.erase(it);
+                    }
+                    name += temp;
+                    if(i != inputList.size()-1) {
+                        name += " ";
+                    }
+                }
+                if(std::regex_match(name, str_exp)) {
+                    completeCommand.name = name;
+                } else
+                    return commandData(c_invalid);
+
+                break;
+            case c_remove_in:
+                if(inputList.size() > 2)
+                    return commandData(c_invalid);
+                inputId = inputList[1];
+
+                try {
+                    completeCommand.id = stoi(inputId);
+                } catch (...) {
+                    return commandData(c_invalid);
+                }
                 break;
             default:
                 break;
         }
 
         return completeCommand;
-//        if(completeCommand.type == c_insert) {
-//            if(inputList.size() != 3)
-//                return commandData(c_invalid);
-//            completeCommand.name = inputList[1];
-//            try {
-//                completeCommand.id = stoi(inputList[2]);
-//            } catch(...) {
-//                return commandData(c_invalid);
-//            }
-//            return completeCommand;
-//        } else if(completeCommand.type == c_remove) {
-//            try {
-//                completeCommand.id = stoi(inputList[1]);
-//            } catch(...) {
-//                return commandData(c_invalid);
-//            }
-//        } else if(completeCommand.type == c_search_id) {
-//            try {
-//                completeCommand.id = stoi(inputList[1]);
-//            } catch(...) {
-//                return commandData(c_invalid);
-//            }
-//        }
-
-
     }
-
-
-//    struct insert {
-//        command type = c_insert;
-//        std::string name;
-//        int id;
-//    };
-//    struct remove {
-//        command c_remove;
-//        int id;
-//    };
-//    struct searchId {
-//        command type = c_search_id;
-//        int id;
-//    };
-//    struct searchName {
-//        command type = c_search_name;
-//        std::string name;
-//    };
-//    struct printIn {
-//        command type = c_print_in;
-//    };
-//    struct printPre {
-//        command type = c_print_pre;
-//    };
-//    struct printPost {
-//        command type = c_print_post;
-//    };
-//    struct printLevel {
-//        command type = c_print_level;
-//    };
-//    struct removeIn {
-//        command type = c_remove_in;
-//    };
 };
 
 #endif //AVL_TREE_COMMANDS_H

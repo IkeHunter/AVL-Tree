@@ -14,7 +14,7 @@ TEST_CASE("BST Insert", "[flag]"){
     inputTree.insert(3, std::string());
     inputTree.insert(2, std::string());
 
-    std::vector<int> a_output = inputTree.inorder();
+    std::vector<int> a_output = inputTree.inorderInt();
     std::vector<int> e_output = {2,3};
     REQUIRE(e_output.size() == a_output.size());
     REQUIRE(a_output == e_output);
@@ -33,7 +33,7 @@ TEST_CASE("BST Insert", "[flag]"){
 //        }
 //    }
 //
-//    actualOutput = inputTree.inorder();
+//    actualOutput = inputTree.inorderInt();
 //    REQUIRE(expectedOutput.size() == actualOutput.size());
 //    REQUIRE_FALSE(expectedOutput == actualOutput);    //This assertion can be wrong. Don't use
 //    std::sort(expectedOutput.begin(), expectedOutput.end());
@@ -47,9 +47,9 @@ TEST_CASE("BST Traversals", "[flag]"){
         inputTree.insert(data, std::string());
     }
 
-    std::vector<int> a_preorder = inputTree.preorder();
-    std::vector<int> a_inorder = inputTree.inorder();
-    std::vector<int> a_postorder = inputTree.postorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
+    std::vector<int> a_inorder = inputTree.inorderInt();
+    std::vector<int> a_postorder = inputTree.postorderInt();
 
     std::vector<int> e_preorder = {5,2,3,8,6,17};
     std::vector<int> e_inorder = {2,3,5,6,8,17};
@@ -82,27 +82,27 @@ TEST_CASE("BST Remove", "[flag]"){
     }
 
     inputTree.remove(25); // node with 2 children
-    std::vector<int> a_inorder = inputTree.inorder();
+    std::vector<int> a_inorder = inputTree.inorderInt();
     std::vector<int> e_inorder = {5,12,26,27,30,32,33,34,35,36};
     REQUIRE(a_inorder == e_inorder);
 
     inputTree.remove(12); // node with 1 child
-    std::vector<int> a2_inorder = inputTree.inorder();
+    std::vector<int> a2_inorder = inputTree.inorderInt();
     std::vector<int> e2_inorder = {5,26,27,30,32,33,34,35,36};
     REQUIRE(a2_inorder == e2_inorder);
 
     inputTree.remove(5); // node with 0 children
-    a_inorder = inputTree.inorder();
+    a_inorder = inputTree.inorderInt();
     e_inorder = {26,27,30,32,33,34,35,36};
     REQUIRE(a_inorder == e_inorder);
 
     inputTree.remove(30); // root, successor with 0 children
-    a_inorder = inputTree.inorder();
+    a_inorder = inputTree.inorderInt();
     e_inorder = {26,27,32,33,34,35,36};
     REQUIRE(a_inorder == e_inorder);
 
     inputTree.remove(32); // root, successor with 1 child
-    a_inorder = inputTree.inorder();
+    a_inorder = inputTree.inorderInt();
     e_inorder = {26,27,33,34,35,36};
     REQUIRE(a_inorder == e_inorder);
 }
@@ -131,7 +131,7 @@ TEST_CASE("AVL Left Rotation", "[flag]"){
 
 
     inputTree.rotateLeft();
-    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
     std::vector<int> e_preorder = {15,10,9,14,20,19,21};
     REQUIRE(a_preorder == e_preorder);
 
@@ -143,7 +143,7 @@ TEST_CASE("AVL Left Rotation", "[flag]"){
     }
 
     inputTree2.rotateLeft(15);
-    std::vector<int> a2_preorder = inputTree2.preorder();
+    std::vector<int> a2_preorder = inputTree2.preorderInt();
     std::vector<int> e2_preorder = {10,9,20,15,14,19,21};
     REQUIRE(a2_preorder == e2_preorder);
 
@@ -159,7 +159,7 @@ TEST_CASE("AVL Right Rotation", "[flag]"){
 
 
     inputTree.rotateRight();
-    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
     std::vector<int> e_preorder = {19,15,10,16,21,20,22};
     REQUIRE(a_preorder == e_preorder);
 
@@ -171,7 +171,7 @@ TEST_CASE("AVL Right Rotation", "[flag]"){
     }
 
     inputTree2.rotateRight(19);
-    std::vector<int> a2_preorder = inputTree2.preorder();
+    std::vector<int> a2_preorder = inputTree2.preorderInt();
     std::vector<int> e2_preorder = {21,15,10,19,16,20,22};
     REQUIRE(a2_preorder == e2_preorder);
 
@@ -187,7 +187,7 @@ TEST_CASE("AVL RightLeft Rotation", "[flag]"){
 
 
     inputTree.rotateRightLeft(10);
-    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
     std::vector<int> e_preorder = {12,10,13};
     REQUIRE(a_preorder == e_preorder);
 
@@ -203,7 +203,7 @@ TEST_CASE("AVL LeftRight Rotation", "[flag]"){
 
 
     inputTree.rotateLeftRight(13);
-    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
     std::vector<int> e_preorder = {12,10,13};
     REQUIRE(a_preorder == e_preorder);
 }
@@ -218,7 +218,7 @@ TEST_CASE("AVL Auto Rotation", "[flag]") {
 
     inputTree.toggleAutoResolve();
     inputTree.refreshTree();
-    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
     std::vector<int> e_preorder = {75,50,25,24,27,70,72,85,80,84,86};
     REQUIRE(a_preorder == e_preorder);
 }
@@ -234,7 +234,7 @@ TEST_CASE("AVL Remove Inorder", "[flag]") {
 
 
     inputTree.removeInorder(1);
-    std::vector<int> a_preorder = inputTree.preorder();
+    std::vector<int> a_preorder = inputTree.preorderInt();
     std::vector<int> e_preorder = {13,10};
     REQUIRE(a_preorder == e_preorder);
 }

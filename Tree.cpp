@@ -10,7 +10,10 @@ std::vector<int> Tree::concatVectors(std::vector<int> &vect1, std::vector<int> &
     vect1.insert(vect1.end(), vect2.begin(), vect2.end());
     return vect1;
 }
-
+std::vector<std::string> Tree::concatVectors(std::vector<std::string> &vect1, std::vector<std::string> &vect2) {
+    vect1.insert(vect1.end(), vect2.begin(), vect2.end());
+    return vect1;
+}
 
 /**== Base and Internal Methods ==**/
 Tree::~Tree() {
@@ -47,12 +50,13 @@ void Tree::treeResolver() {
 
 /** Manipulator Methods **/
 // Inserts node into tree at given value
-void Tree::insert(unsigned int value, std::string name, TreeNode *base) {
+bool Tree::insert(unsigned int value, std::string name, TreeNode *base) {
     auto node = new TreeNode(value, name);
 
     if(this->root == nullptr) {
         this->root = node;
-        return;
+        this->size++;
+        return true;
     }
     if(base == nullptr)
         base = this->root;
@@ -61,21 +65,23 @@ void Tree::insert(unsigned int value, std::string name, TreeNode *base) {
         try {
             base->insertLeftNode(node);
         } catch (AddNodeToExisting& _){
-            insert(value, std::string(), base->leftNode());
+            insert(value, name, base->leftNode());
         }
     } else {
         try {
             base->insertRightNode(node);
         } catch (AddNodeToExisting& _){
-            insert(value, std::string(), base->rightNode());
+            insert(value, name, base->rightNode());
         }
     }
 
+    this->size++;
     this->treeResolver();
+    return true;
 }
 
-/**== Tree Traversals ==**/
-std::vector<int> Tree::preorder(TreeNode *node) {
+/**== Tree Int Traversals ==**/
+std::vector<int> Tree::preorderInt(TreeNode *node) {
     std::vector<int> nodeVector;
 
     if(node == nullptr) {
@@ -89,18 +95,18 @@ std::vector<int> Tree::preorder(TreeNode *node) {
 
     nodeVector.push_back(node->getId()); // Node
     if(node->leftNode() != nullptr) { // Left Subtree
-        std::vector<int> leftVector = this->preorder(node->leftNode());
+        std::vector<int> leftVector = this->preorderInt(node->leftNode());
         concatVectors(nodeVector, leftVector);
     }
     if(node->rightNode() != nullptr) { // Right Subtree
-        std::vector<int> rightVector = this->preorder(node->rightNode());
+        std::vector<int> rightVector = this->preorderInt(node->rightNode());
         concatVectors(nodeVector, rightVector);
     }
 
     return nodeVector;
 }
 
-std::vector<int> Tree::inorder(TreeNode *node) {
+std::vector<int> Tree::inorderInt(TreeNode *node) {
     std::vector<int> nodeVector;
 
     if(node == nullptr) {
@@ -111,19 +117,19 @@ std::vector<int> Tree::inorder(TreeNode *node) {
     }
 
     if(node->leftNode() != nullptr) { // Left Subtree
-        std::vector<int> leftVector = this->inorder(node->leftNode());
+        std::vector<int> leftVector = this->inorderInt(node->leftNode());
         concatVectors(nodeVector, leftVector);
     }
     nodeVector.push_back(node->getId()); // Node
     if(node->rightNode() != nullptr) { // Right Subtree
-        std::vector<int> rightVector = this->inorder(node->rightNode());
+        std::vector<int> rightVector = this->inorderInt(node->rightNode());
         concatVectors(nodeVector, rightVector);
     }
 
     return nodeVector;
 }
 
-std::vector<int> Tree::postorder(TreeNode *node) {
+std::vector<int> Tree::postorderInt(TreeNode *node) {
     std::vector<int> nodeVector;
 
     if(node == nullptr) {
@@ -134,11 +140,11 @@ std::vector<int> Tree::postorder(TreeNode *node) {
     }
 
     if(node->leftNode() != nullptr) { // Left Subtree
-        std::vector<int> leftVector = this->postorder(node->leftNode());
+        std::vector<int> leftVector = this->postorderInt(node->leftNode());
         concatVectors(nodeVector, leftVector);
     }
     if(node->rightNode() != nullptr) { // Right Subtree
-        std::vector<int> rightVector = this->postorder(node->rightNode());
+        std::vector<int> rightVector = this->postorderInt(node->rightNode());
         concatVectors(nodeVector, rightVector);
     }
     nodeVector.push_back(node->getId()); // Node
@@ -146,7 +152,7 @@ std::vector<int> Tree::postorder(TreeNode *node) {
     return nodeVector;
 }
 
-std::vector<int> Tree::levelorder(TreeNode *node) {
+std::vector<int> Tree::levelorderInt(TreeNode *node) {
 
     std::queue<TreeNode*> currentLevel; // Tracks parents
     std::queue<TreeNode*> children; // Tracks children of parents
@@ -184,8 +190,79 @@ std::vector<int> Tree::levelorder(TreeNode *node) {
     return nodeVector;
 }
 
+/**== Tree Traversals ==**/
+std::vector<std::string> Tree::preorder(TreeNode *node) {
+    std::vector<std::string> nodeVector;
+
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return nodeVector;
+    }
+
+    nodeVector.push_back(node->getName()); // Node
+    if(node->leftNode() != nullptr) { // Left Subtree
+        std::vector<std::string> leftVector = this->preorder(node->leftNode());
+        concatVectors(nodeVector, leftVector);
+    }
+    if(node->rightNode() != nullptr) { // Right Subtree
+        std::vector<std::string> rightVector = this->preorder(node->rightNode());
+        concatVectors(nodeVector, rightVector);
+    }
+
+    return nodeVector;
+};
+std::vector<std::string> Tree::inorder(TreeNode *node) {
+    std::vector<std::string> nodeVector;
+
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return nodeVector;
+    }
+
+    if(node->leftNode() != nullptr) { // Left Subtree
+        std::vector<std::string> leftVector = this->inorder(node->leftNode());
+        concatVectors(nodeVector, leftVector);
+    }
+    nodeVector.push_back(node->getName()); // Node
+    if(node->rightNode() != nullptr) { // Right Subtree
+        std::vector<std::string> rightVector = this->inorder(node->rightNode());
+        concatVectors(nodeVector, rightVector);
+    }
+
+    return nodeVector;
+};
+std::vector<std::string> Tree::postorder(TreeNode *node) {
+    std::vector<std::string> nodeVector;
+
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return nodeVector;
+    }
+
+    if(node->leftNode() != nullptr) { // Left Subtree
+        std::vector<std::string> leftVector = this->postorder(node->leftNode());
+        concatVectors(nodeVector, leftVector);
+    }
+    if(node->rightNode() != nullptr) { // Right Subtree
+        std::vector<std::string> rightVector = this->postorder(node->rightNode());
+        concatVectors(nodeVector, rightVector);
+    }
+    nodeVector.push_back(node->getName()); // Node
+
+    return nodeVector;
+};
+
+
+
+/**== Print Traversal ==**/
 void Tree::printTree(Tree::traversal method) {
-    std::vector<int> selectedVector;
+    std::vector<std::string> selectedVector;
 
     switch(method) {
         case(t_preorder):
@@ -197,9 +274,6 @@ void Tree::printTree(Tree::traversal method) {
         case(t_postorder):
             selectedVector = postorder();
             break;
-        case(t_levelorder):
-            selectedVector = levelorder();
-            break;
         default:
             selectedVector = preorder();
             break;
@@ -208,7 +282,10 @@ void Tree::printTree(Tree::traversal method) {
     auto treeIter = selectedVector.begin();
 
     for(;treeIter != selectedVector.end() - 1; treeIter++) {
-        std::cout << *treeIter << ", ";
+        std::cout << *treeIter;
+        if(treeIter != selectedVector.end() -1) {
+            std::cout << ", ";
+        }
     }
     std::cout << *treeIter;
     std::cout << std::endl;
@@ -261,6 +338,27 @@ TreeNode *Tree::search(int val, TreeNode* node, relationship member) {
     return node;
 }
 
+std::vector<TreeNode*> Tree::searchName(std::string& name, std::vector<TreeNode*>& nodes, TreeNode *base) {
+
+    if(base == nullptr) {
+        if (this->root != nullptr)
+            base = this->root;
+        else
+            return nodes;
+    }
+
+    if(base->getName() == name)
+        nodes.push_back(base);
+
+    if(base->leftNode() != nullptr)
+        searchName(name, nodes,base->leftNode());
+
+    if(base->rightNode() != nullptr)
+        searchName(name, nodes, base->rightNode());
+
+    return nodes;
+}
+
 /**== Remove node if node is root, node as 0,1,2 children, using successor method ==**/
 bool Tree::remove(int value) {
     TreeNode* node = search(value);
@@ -291,7 +389,6 @@ bool Tree::remove(int value) {
                 successor->removeRightNode();
             }
 
-
             node->removeRightNode();
             node->removeLeftNode();
             if(successorParent != nullptr) {
@@ -304,6 +401,8 @@ bool Tree::remove(int value) {
                 successor->insertLeftNode(leftChild);
             if(successor != rightChild)
                 successor->insertRightNode(rightChild);
+            else
+                successor->insertRightNode(successorChild);
 
             delete node;
             this->root = successor;
@@ -365,6 +464,7 @@ bool Tree::remove(int value) {
         delete node;
     }
 
+    this->size--;
     treeResolver();
     return true;
 }
@@ -648,15 +748,60 @@ void Tree::balanceTree(TreeNode *node) {
         performRotation(node);
 }
 
-bool Tree::removeInorder(int value) {
-    std::vector<int> dataList = this->inorder();
-    if(value >= dataList.size()) {
+bool Tree::removeInorder(int value, std::stack<TreeNode*>* stack) {
+
+    if(value >= this->size)
         return false;
-    }
-    int selectedInt = dataList.at(value);
-    this->remove(selectedInt);
-    return true;
+
+    std::vector<int> nodeIds = getNodeInOrder(value);
+
+    return this->remove(nodeIds[nodeIds.size()-1]);
+
+// Old Code
+//    std::vector<int> dataList = this->inorderInt();
+//    if(value >= dataList.size()) {
+//        return false;
+//    }
+//    int selectedInt = dataList.at(value);
+//    this->remove(selectedInt);
+//    return true;
 }
+
+std::vector<int> Tree::getNodeInOrder(int value, TreeNode *node) {
+    std::vector<int> nodeVector;
+
+    if(node == nullptr) {
+        if (this->root != nullptr)
+            node = this->root;
+        else
+            return nodeVector;
+    }
+    if(nodeVector.size()-1 == value)
+        return nodeVector;
+
+    if(node->leftNode() != nullptr) { // Left Subtree
+        std::vector<int> leftVector = this->getNodeInOrder(value, node->leftNode());
+        concatVectors(nodeVector, leftVector);
+        if(nodeVector.size()-1 == value)
+            return nodeVector;
+    }
+    nodeVector.push_back(node->getId()); // Node
+    if(nodeVector.size()-1 == value)
+        return nodeVector;
+    if(node->rightNode() != nullptr) { // Right Subtree
+        std::vector<int> rightVector = this->getNodeInOrder(value, node->rightNode());
+        concatVectors(nodeVector, rightVector);
+        if(nodeVector.size()-1 == value)
+            return nodeVector;
+    }
+
+    return nodeVector;
+};
+
+
+
+
+
 
 
 

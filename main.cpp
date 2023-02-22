@@ -15,19 +15,10 @@ using namespace std;
  * DONE: create rotate left-right
  * DONE: add recursive count attribute to node
  * DONE: create dynamic AVL methods, including dynamic rotations
- * TODO: change basic int AVL to student AVL
- * TODO: implement input parsing
- * TODO: connect methods and finish rubric
+ * DONE: change basic int AVL to student AVL
+ * DONE: implement input parsing
+ * DONE: connect methods and finish rubric
  ============================================= **/
-
-/**
- * Next steps:
- * I just "finished" the print method, but you should probably look over it bc my
- * brain has been dead for hours lol.
- * Next up, look over tree and nodes class to make sure it can run and do simple methods,
- * configure main.
- * **/
-
 
 int main(int argc, char *argv[]) {
     Commands commandPallet;
@@ -43,44 +34,66 @@ int main(int argc, char *argv[]) {
         getline(cin, input);
 
         Commands::commandData cc = commandPallet.parseInput(input);
+        TreeNode* node;
+        std::vector<TreeNode*> nodeVect;
         switch(cc.type) {
             case(Commands::c_insert):
-                cout << "insert" << endl;
-                inputTree.insert(cc.id, cc.name);
+                if(!inputTree.insert(cc.id, cc.name))
+                    cout << "unsuccessful" << endl;
+                else
+                    cout << "successful" << endl;
                 break;
             case(Commands::c_remove):
-                cout << "remove" << endl;
-                inputTree.remove(cc.id);
+                if(!inputTree.remove(cc.id))
+                    cout << "unsuccessful" << endl;
+                else
+                    cout << "successful" << endl;
                 break;
             case(Commands::c_search_id):
-                cout << "searchId" << endl;
-                inputTree.search(cc.id);
+
+                node = inputTree.search(cc.id);
+                if(node == nullptr)
+                    cout << "unsuccessful" << endl;
+                else
+                    cout << node->getName() << endl;
+
                 break;
             case(Commands::c_search_name):
-                cout << "searchName" << endl;
+                nodeVect = inputTree.searchName(cc.name, nodeVect);
+                if(!nodeVect.empty()) {
+                    if(nodeVect.size() == 1)
+                        cout << nodeVect[0]->getId() << endl;
+                    else {
+                        for(auto data : nodeVect) {
+                            cout << data->getId() << endl;
+                        }
+                    }
+                } else
+                    cout << "unsuccessful" << endl;
                 break;
             case(Commands::c_print_in):
-                cout << "printInorder" << endl;
                 inputTree.printTree(Tree::t_inorder);
                 break;
             case(Commands::c_print_pre):
-                cout << "printPreorder" << endl;
                 inputTree.printTree(Tree::t_preorder);
                 break;
             case(Commands::c_print_post):
-                cout << "printPostorder" << endl;
                 inputTree.printTree(Tree::t_postorder);
                 break;
             case(Commands::c_print_level):
-                cout << "printLevelCount" << endl;
-                cout << inputTree.getHeight() << endl;
+                if(inputTree.getHeight() > 0)
+                    cout << inputTree.levelCount() << endl;
+                else
+                    cout << "0" << endl;
                 break;
             case(Commands::c_remove_in):
-                cout << "removeInorder" << endl;
-                inputTree.removeInorder(cc.id);
+                if(!inputTree.removeInorder(cc.id))
+                    cout << "unsuccessful" << endl;
+                else
+                    cout << "successful" << endl;
                 break;
             default:
-                cout << "invalid" << endl;
+                cout << "unsuccessful" << endl;
                 break;
         }
 

@@ -34,6 +34,7 @@ public:
     int getBalance() const {return balance;};
     unsigned int getId() const {return id;};
     int getChildren() const {return children;};
+    std::string getName() {return name;};
 
     /** Mutators **/
     void insertRightNode(TreeNode* node);

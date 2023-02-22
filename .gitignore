@@ -1,3 +1,9 @@
 .idea/
 CMakeLists.txt
 cmake-build-debug/
+~$Report.docx
+~$Test.docx
+Report.docx
+Test.docx
+Report.pdf
+Test.pdf
